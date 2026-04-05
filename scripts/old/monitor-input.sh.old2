@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+# 9/16/25
+#
+
+# Sets working dir
+cd "$(dirname "$0")" || exit 1
+
+declare -A INPUT_CODES=(
+  ["dp1"]=0x0f
+  ["hdmi1"]=0x05
+)
+
+BUS=2
+
+current_input=$(cat .monitorvalue) || current_input="dp1"
+
+echo "Detected current input: $current_input"
+
+# Determine and switch to the next input
+case "$current_input" in
+  "dp1")
+    next_input="hdmi1"
+    ;;
+  "hdmi1")
+    next_input="dp1"
+    ;;
+  *)
+    echo "Unexpected input state: $current_input"
+    exit 1
+    ;;
+esac
+
+echo "Switching to: $next_input"
+ddcutil -b $BUS setvcp 60 "${INPUT_CODES[$next_input]}" || {
+  echo "Error: Failed to switch input"
+  exit 1
+}
+
+echo "$next_input" > .monitorvalue
+
+exit 0

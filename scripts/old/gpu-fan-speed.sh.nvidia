@@ -1,0 +1,88 @@
+#!/bin/sh
+# GPU Fan Speed Control Script
+# Date: 2025-11-12
+#
+# Usage:
+#   ./gpu-fan.sh <speed 1–100>
+#   ./gpu-fan.sh --auto | -a
+#   (or no argument → select via yad dropdown)
+
+GPU=0
+FAN=0
+
+set_fan_speed() {
+    SPEED=$1
+    nvidia-settings \
+        -a "[gpu:${GPU}]/GPUFanControlState=1" \
+        -a "[fan:${FAN}]/GPUTargetFanSpeed=${SPEED}" \
+        > /dev/null 2>&1
+    echo "GPU fan speed set to ${SPEED}%."
+}
+
+set_auto_mode() {
+    nvidia-settings -a "[gpu:${GPU}]/GPUFanControlState=0" > /dev/null 2>&1
+    echo "Automatic fan control enabled."
+}
+
+# --- Sanitize function ---
+sanitize() {
+    printf '%s' "$1" \
+        | tr -d '\r' \
+        | cut -d'|' -f1 \
+        | tr -d '%' \
+        | xargs 2>/dev/null
+}
+
+# If user provided a CLI argument, sanitize it now
+if [ -n "$1" ]; then
+    set -- "$(sanitize "$1")"
+fi
+
+# --- If no argument provided, prompt using yad dropdown ---
+if [ -z "$1" ]; then
+    if command -v yad >/dev/null 2>&1; then
+        CHOICE=$(yad --list \
+            --title="Set GPU Fan Speed" \
+            --text="Select fan mode or speed:" \
+            --column="Option" \
+            --hide-header \
+            --center \
+            --width=250 \
+            --height=300 \
+            "Auto" "25%" "50%" "75%" "100%")
+
+        # If user cancels, exit quietly
+        [ -z "$CHOICE" ] && exit 0
+
+        # Sanitize yad output and treat as argument
+        set -- "$(sanitize "$CHOICE")"
+    else
+        echo "Error: yad not installed. Please install it or pass a fan speed as argument." >&2
+        exit 1
+    fi
+fi
+
+# --- Argument Handling ---
+case "$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')" in
+    -a|--a|--auto|auto)
+        set_auto_mode
+        exit 0
+        ;;
+esac
+
+# Validate numeric input: only digits allowed
+case "$1" in
+    ''|*[!0-9]*)
+        echo "Error: Argument must be a number between 1 and 100, or use --auto." >&2
+        exit 1
+        ;;
+esac
+
+# Numeric range check
+if [ "$1" -lt 1 ] || [ "$1" -gt 100 ]; then
+    echo "Error: Fan speed must be between 1 and 100." >&2
+    exit 1
+fi
+
+set_fan_speed "$1"
+exit 0

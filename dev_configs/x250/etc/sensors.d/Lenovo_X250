@@ -1,0 +1,13 @@
+# Sokoloft 1/20/26
+
+chip "thinkpad-isa-0000"
+    ignore CPU
+    ignore GPU
+    ignore temp3
+    ignore temp4
+    ignore temp5
+    ignore temp6
+    ignore temp8
+    ignore temp7
+    label fan1 Fan
+    label pwm1 "Fan Speed"
