@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 #
-# Open Tabliss in Firefox and later librewolf
-# 4/5/26
+# Open Tabliss in Librewolf
+# 4/29/26
 #
 
-BROWSER=firefox
-
-# Tabliss URL
-TABLISS_URL="moz-extension://ac2de196-9dac-4aa1-b760-b2e72a358555/index.html"
-
+# Statics
+BROWSER=librewolf
+TABLISS_URL=$(< tabliss_str.txt)
 
 case "${1:-}" in
     -w|--window)

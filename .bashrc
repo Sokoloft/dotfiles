@@ -1,19 +1,17 @@
 # My .bashrc
 #
-# 4/5/26
+# 4/6/26
 # Sokoloft
 #
 
-# Working dir
+# Statics
 DIR="$HOME/.local/dotfiles"
-
 EDITOR=kate
 
-# Set config for the specific system by hostname
-PC="3600XT"
 
 # System
 alias cls=clear
+alias ff=fastfetch
 alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 alias edit-grub="$EDITOR /etc/default/grub"
 
@@ -29,24 +27,29 @@ alias reload-configs="ln -nsf $DIR/configs/* $HOME/.config"
 # Scripts
 alias random="$DIR/scripts/randomstr.py"
 
-case "$PC" in
-  3600XT) # 3600XT
+case "$HOSTNAME" in
+  3600XT) # 3600XT Main Desktop
     alias spotx="bash <(curl -sSL https://spotx-official.github.io/run.sh)"
     alias spotdl="$HOME/.venv/bin/spotdl"
     alias temps="watch sensors amdgpu-pci-0a00 zenpower-pci-00c3 it8655-isa-0290"
     alias edit-steamlauncher="$EDITOR $DIR/scripts/steam-launcher.sh"
   ;;
-  x250) # x250
+  x250) # Thinkpad x250
+    LAPTOP=True
     alias temps="watch sensors coretemp-isa-0000 thinkpad-isa-0000 pch_wildcat_point-virtual-0 drivetemp-scsi-0-0"
-    alias xairmute="$HOME/.venv/bin/xairmute"
   ;;
-  Dell) # Dell
-    alias temps="watch sensors "
-    alias xairmute="$HOME/.venv/bin/xairmute"
+  5520) # Dell Latitude 5520
+    LAPTOP=True
+    alias temps="watch sensors dell_smm-virtual-0"
   ;;
   *)
-    echo "Error: PC not defined!"
+    echo "Error: Hostname not defined!"
     ;;
 esac
+
+# Shared laptop alias's
+if [ $LAPTOP ]; then
+  alias xairmute="$HOME/.venv/bin/xairmute"
+fi
 
 fastfetch

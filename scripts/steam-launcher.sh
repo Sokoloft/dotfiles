@@ -47,6 +47,15 @@ case "$FLAG" in
     -NoGamescope) # A Default/General preset
         gamemoderun mangohud "$@"
         ;;
+    -Vostok) # Road to Vostok -- Force Vulkan
+        gamescope \
+            --force-grab-cursor \
+            --adaptive-sync \
+            -r 60 \
+            -W 2560 -H 1440 \
+            -f \
+            -- gamemoderun "$@" --rendering-driver vulkan --rendering-method forward_plus
+        ;;
     -Zomboid) # Zomboid
         #DXVK_FRAME_RATE=60 \
         gamescope \
