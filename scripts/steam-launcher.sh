@@ -8,11 +8,11 @@
 set -euo pipefail
 
 # Global environment (safe for all games)
-export \
-    LD_PRELOAD="" \
-    STEAM_USE_NATIVE_CONTROLLERS=1 \
-    MANGOHUD_CONFIGFILE="$HOME/.config/MangoHud/MangoHud.conf" \
-    VK_LOADER_LAYERS_ENABLE=VK_LAYER_MANGOHUD_overlay_x86_64
+#export \
+#    LD_PRELOAD="" \
+#    STEAM_USE_NATIVE_CONTROLLERS=1 \
+#    MANGOHUD_CONFIGFILE="$HOME/.config/MangoHud/MangoHud.conf" \
+    #VK_LOADER_LAYERS_ENABLE=VK_LAYER_MANGOHUD_overlay_x86_64
 
 
 error_dialog() {
@@ -37,6 +37,7 @@ shift   # IMPORTANT: remove the selector flag so %command% works
 case "$FLAG" in
     -Default) # A Default/General preset
         gamescope \
+            --mangoapp \
             --force-grab-cursor \
             --adaptive-sync \
             -r 60 \
@@ -58,13 +59,29 @@ case "$FLAG" in
         ;;
     -Zomboid) # Zomboid
         #DXVK_FRAME_RATE=60 \
+        LD_PRELOAD="" \
+        LOW_LATENCY_LAYER=1 \
         gamescope \
+            --mangoapp \
             --force-grab-cursor \
             --adaptive-sync \
             -r 60 \
             -W 2560 -H 1440 \
             -f \
-            -- gamemoderun "$@" -Xmx16g -Xms16g
+            -- gamemoderun "$@" -Xmx16g -Xms8g
+        ;;
+    -Sulfer) # Sulfer
+        #DXVK_FRAME_RATE=60 \
+        LD_PRELOAD="" \
+        LOW_LATENCY_LAYER=1 \
+        gamescope \
+            --mangoapp \
+            --force-grab-cursor \
+            --adaptive-sync \
+            -r 60 \
+            -W 2560 -H 1440 \
+            -f \
+            -- gamemoderun "$@"
         ;;
     -SnowRunner) # SnowRunner
         #DXVK_FRAME_RATE=60 \
@@ -91,14 +108,33 @@ case "$FLAG" in
     -BeamNG) # BeamNG Drive
         #DXVK_FRAME_RATE=60 \
         #PROTON_USE_DXVK=1 \
-        #SDL_VIDEODRIVER=wayland \
+        #LD_PRELOAD="" \
+        STEAM_USE_NATIVE_CONTROLLERS=1 \
+        SDL_VIDEODRIVER=wayland \
+        LOW_LATENCY_LAYER=1 \
         gamescope \
+            --mangoapp \
             --force-grab-cursor \
             --adaptive-sync \
             -r 60 \
             -W 2560 -H 1440 \
             -f \
-            -- gamemoderun "$@" -gfx vk
+            -- gamemoderun ./BinLinux/BeamNG.drive.x64 "$@" -gfx vk
+        ;;
+    -MotorTown) # Motor Town
+        #DXVK_FRAME_RATE=60 \
+        #PROTON_USE_DXVK=1 \
+        #LD_PRELOAD="" \
+        STEAM_USE_NATIVE_CONTROLLERS=1 \
+        LOW_LATENCY_LAYER=1 \
+        gamescope \
+            --mangoapp \
+            --force-grab-cursor \
+            --adaptive-sync \
+            -r 60 \
+            -W 2560 -H 1440 \
+            -f \
+            -- gamemoderun "$@"
         ;;
     -DRG) # Deep Rock Galactic
         #DXVK_FRAME_RATE=60 \

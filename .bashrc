@@ -1,6 +1,6 @@
 # My .bashrc
 #
-# 4/6/26
+# 9/22/26
 # Sokoloft
 #
 
@@ -24,22 +24,21 @@ alias reload-bashrc="source $HOME/.bashrc"
 alias dotfiles="cd $DIR"
 alias reload-configs="ln -nsf $DIR/configs/* $HOME/.config"
 
-# Scripts
+# Scripts & Tools
 alias random="$DIR/scripts/randomstr.py"
+alias xairmute="$HOME/.venv/bin/xairmute"
+alias spotx="bash <(curl -sSL https://spotx-official.github.io/run.sh)"
+alias spotdl="$HOME/.venv/bin/spotdl"
 
 case "$HOSTNAME" in
   3600XT) # 3600XT Main Desktop
-    alias spotx="bash <(curl -sSL https://spotx-official.github.io/run.sh)"
-    alias spotdl="$HOME/.venv/bin/spotdl"
     alias temps="watch sensors amdgpu-pci-0a00 zenpower-pci-00c3 it8655-isa-0290"
     alias edit-steamlauncher="$EDITOR $DIR/scripts/steam-launcher.sh"
   ;;
   x250) # Thinkpad x250
-    LAPTOP=True
     alias temps="watch sensors coretemp-isa-0000 thinkpad-isa-0000 pch_wildcat_point-virtual-0 drivetemp-scsi-0-0"
   ;;
   5520) # Dell Latitude 5520
-    LAPTOP=True
     alias temps="watch sensors dell_smm-virtual-0"
   ;;
   *)
@@ -47,9 +46,5 @@ case "$HOSTNAME" in
     ;;
 esac
 
-# Shared laptop alias's
-if [ $LAPTOP ]; then
-  alias xairmute="$HOME/.venv/bin/xairmute"
-fi
 
 fastfetch
