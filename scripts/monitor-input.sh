@@ -7,7 +7,7 @@
 set -euo pipefail
 
 
-BUS=2
+BUS=7
 VCP_INPUT=60
 
 declare -A INPUT_NAMES=(

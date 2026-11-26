@@ -108,7 +108,7 @@ case "$FLAG" in
     -BeamNG) # BeamNG Drive
         #DXVK_FRAME_RATE=60 \
         #PROTON_USE_DXVK=1 \
-        #LD_PRELOAD="" \
+        LD_PRELOAD="/home/sokoloft/.local/share/BeamNG/BeamNG.drive/beamng_Earth/libbngearth_gcpatch.so:$LD_PRELOAD"
         STEAM_USE_NATIVE_CONTROLLERS=1 \
         SDL_VIDEODRIVER=wayland \
         LOW_LATENCY_LAYER=1 \
@@ -138,7 +138,10 @@ case "$FLAG" in
         ;;
     -DRG) # Deep Rock Galactic
         #DXVK_FRAME_RATE=60 \
+        PROTON_ENABLE_WAYLAND=1 \
+        LOW_LATENCY_LAYER=1 \
         gamescope \
+            --mangoapp \
             --force-grab-cursor \
             --adaptive-sync \
             -r 60 \
@@ -147,14 +150,15 @@ case "$FLAG" in
             -- gamemoderun "$@" -nosplash
         ;;
     -Cyberpunk) # Cyberpunk 2077
-        WINEDLLOVERRIDES="winmm,version=n,b" \
+        PROTON_ENABLE_WAYLAND=1 \
         gamescope \
+            --mangoapp \
             --force-grab-cursor \
             --adaptive-sync \
             -r 60 \
             -W 2560 -H 1440 \
             -f \
-            -- gamemoderun "$@" --launcher-skip -modded
+            -- gamemoderun "$@" --launcher-skip --intro-skip
         ;;
     -RON) # Ready or Not
         gamescope \
